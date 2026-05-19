@@ -1,0 +1,22 @@
+name: Pipeline CI-CD
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Descargar codigo
+      uses: actions/checkout@v4
+    - name: Mostrar archivos
+      run: ls -la
+    - name: Construir imagen Docker
+      run: docker build -t practica-cicd:v1 .
+    - name: Ejecutar contenedor
+      run: |
+        docker run -d -p 8080:80 --name web practica-cicd:v1 || true
+    - name: Verificar contenedor
+      run: docker ps
